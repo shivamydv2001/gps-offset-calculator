@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArduPilot GPS Offset Calculator</title>
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>ArduPilot GPS Offset Calculator</h1>
+
+        <div class="card">
+
+            <label for="distance">GPS Distance (m)</label>
+            <input
+                type="number"
+                id="distance"
+                value="1"
+                min="0.01"
+                step="0.01">
+
+            <label for="mountType">Mount Type</label>
+
+            <select id="mountType">
+
+                <option value="diag_fr_rl">
+                    Front Right ↔ Rear Left
+                </option>
+
+                <option value="diag_fl_rr">
+                    Front Left ↔ Rear Right
+                </option>
+
+                <option value="left_right">
+                    Left ↔ Right
+                </option>
+
+                <option value="front_back">
+                    Front ↔ Rear
+                </option>
+
+            </select>
+
+            <button id="calculateBtn">
+                Calculate
+            </button>
+
+        </div>
+
+        <div class="results">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>GPS1_POS_X</td>
+                        <td id="gps1x">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS1_POS_Y</td>
+                        <td id="gps1y">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS1_POS_Z</td>
+                        <td id="gps1z">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS2_POS_X</td>
+                        <td id="gps2x">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS2_POS_Y</td>
+                        <td id="gps2y">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS2_POS_Z</td>
+                        <td id="gps2z">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS1_MB_OFS_X</td>
+                        <td id="mbx">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS1_MB_OFS_Y</td>
+                        <td id="mby">0</td>
+                    </tr>
+
+                    <tr>
+                        <td>GPS1_MB_OFS_Z</td>
+                        <td id="mbz">0</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="buttons">
+
+            <button id="copyBtn">
+                Copy Parameters
+            </button>
+
+            <button id="exportBtn">
+                Export PARAM
+            </button>
+
+        </div>
+
+        <div class="diagram-section">
+
+            <h2>Mounting Diagram</h2>
+
+            <canvas
+                id="diagram"
+                width="800"
+                height="400">
+            </canvas>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
+
+</body>
+</html>
