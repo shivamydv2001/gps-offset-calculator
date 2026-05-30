@@ -1,207 +1,122 @@
-import {
-    dmsToDecimal
-}
-from "./dms.js";
-import { calculateCoordinates }
-from "./geometry.js";
+import { dmsToDecimal } from "./dms.js";
+import { calculateCoordinates } from "./geometry.js";
+import { calculateMB } from "./calculator.js";
 
-import { calculateMB }
-from "./calculator.js";
+const $ = (id) => document.getElementById(id);
 
-// import { copyParameters }
-// from "./clipboard.js";
-
-// import { exportParam }
-// from "./export.js";
-
-// let parameterText = "";
-
-document
-.getElementById("calculateBtn")
-.addEventListener(
-    "click",
-    runCalculation
-);
-
-// document
-// .getElementById("copyBtn")
-// .addEventListener(
-//     "click",
-//     () =>
-//     {
-//         copyParameters(parameterText);
-//     }
-// );
-
-// document
-// .getElementById("exportBtn")
-// .addEventListener(
-//     "click",
-//     () =>
-//     {
-//         exportParam(parameterText);
-//     }
-// );
-
-// dms tool
-document
-.getElementById("dmsBtn")
-.addEventListener(
-    "click",
-    toggleDmsPanel
-);
-
-document
-.getElementById("convertDmsBtn")
-.addEventListener(
-    "click",
-    convertDmsCoordinates
-);
-
-function runCalculation()
-{
-    const distance =
-    parseFloat(
-        document.getElementById(
-            "distance"
-        ).value
-    );
-
-    const mountType =
-    document.getElementById(
-        "mountType"
-    ).value;
-
-    const gps =
-    calculateCoordinates(
-        distance,
-        mountType
-    );
-
-    const mb =
-    calculateMB(
-        gps.gps1,
-        gps.gps2
-    );
-
-    document.getElementById("gps1x").innerText =
-        gps.gps1.x.toFixed(4);
-
-    document.getElementById("gps1y").innerText =
-        gps.gps1.y.toFixed(4);
-
-    document.getElementById("gps1z").innerText =
-        gps.gps1.z.toFixed(4);
-
-    document.getElementById("gps2x").innerText =
-        gps.gps2.x.toFixed(4);
-
-    document.getElementById("gps2y").innerText =
-        gps.gps2.y.toFixed(4);
-
-    document.getElementById("gps2z").innerText =
-        gps.gps2.z.toFixed(4);
-
-    document.getElementById("mbx").innerText =
-        mb.x.toFixed(4);
-
-    document.getElementById("mby").innerText =
-        mb.y.toFixed(4);
-
-    document.getElementById("mbz").innerText =
-        mb.z.toFixed(4);
-
-    // parameterText =
-
-`GPS1_POS_X=${gps.gps1.x.toFixed(4)}
-GPS1_POS_Y=${gps.gps1.y.toFixed(4)}
-GPS1_POS_Z=${gps.gps1.z.toFixed(4)}
-
-GPS2_POS_X=${gps.gps2.x.toFixed(4)}
-GPS2_POS_Y=${gps.gps2.y.toFixed(4)}
-GPS2_POS_Z=${gps.gps2.z.toFixed(4)}
-
-GPS1_MB_OFS_X=${mb.x.toFixed(4)}
-GPS1_MB_OFS_Y=${mb.y.toFixed(4)}
-GPS1_MB_OFS_Z=${mb.z.toFixed(4)}
-`;
+// Safe event binding
+function on(id, event, handler) {
+    const el = $(id);
+    if (el) el.addEventListener(event, handler);
 }
 
+// -------------------- NAV --------------------
+on("showGpsBtn", "click", showGpsTool);
+on("showDmsBtn", "click", showDmsTool);
+on("gpsBackBtn", "click", showHome);
+on("dmsBackBtn", "click", showHome);
+
+// -------------------- MAIN CALC --------------------
+on("calculateBtn", "click", runCalculation);
+
+function runCalculation() {
+    const distanceInput = $("distance")?.value?.trim();
+    const distance = distanceInput ? parseFloat(distanceInput) : 0;
+
+    const mountType = $("mountType")?.value || "default";
+
+    if (isNaN(distance)) {
+        alert("Invalid distance value");
+        return;
+    }
+
+    const gps = calculateCoordinates(distance, mountType);
+    const mb = calculateMB(gps.gps1, gps.gps2);
+
+    updateOutput("gps1", gps.gps1);
+    updateOutput("gps2", gps.gps2);
+    updateMB(mb);
+}
+
+function updateOutput(prefix, data) {
+    const set = (key, val) => {
+        const el = $(key);
+        if (el) el.innerText = val.toFixed(4);
+    };
+
+    set(`${prefix}x`, data.x);
+    set(`${prefix}y`, data.y);
+    set(`${prefix}z`, data.z);
+}
+
+function updateMB(mb) {
+    const set = (key, val) => {
+        const el = $(key);
+        if (el) el.innerText = val.toFixed(4);
+    };
+
+    set("mbx", mb.x);
+    set("mby", mb.y);
+    set("mbz", mb.z);
+}
+
+// Run once safely
 runCalculation();
 
- //dms tool
- function toggleDmsPanel()
- {
-     const panel =
-     document.getElementById(
-         "dmsPanel"
-     );
- 
-     panel.style.display =
-         panel.style.display === "none"
-         ? "block"
-         : "none";
- }
+// -------------------- DMS TOOL --------------------
+on("dmsBtn", "click", toggleDmsPanel);
+on("convertDmsBtn", "click", convertDmsCoordinates);
 
- function convertDmsCoordinates()
-{
-    const latitude =
-    dmsToDecimal(
-        parseFloat(
-            document.getElementById(
-            "latDeg"
-            ).value
-        ),
+function toggleDmsPanel() {
+    const panel = $("dmsPanel");
+    if (!panel) return;
 
-        parseFloat(
-            document.getElementById(
-            "latMin"
-            ).value
-        ),
+    panel.style.display =
+        panel.style.display === "none" ? "block" : "none";
+}
 
-        parseFloat(
-            document.getElementById(
-            "latSec"
-            ).value
-        ),
-
-        document.getElementById(
-        "latDir"
-        ).value
+function convertDmsCoordinates() {
+    const lat = dmsToDecimal(
+        parseFloat($("latDeg")?.value || 0),
+        parseFloat($("latMin")?.value || 0),
+        parseFloat($("latSec")?.value || 0),
+        $("latDir")?.value || "N"
     );
 
-    const longitude =
-    dmsToDecimal(
-        parseFloat(
-            document.getElementById(
-            "lonDeg"
-            ).value
-        ),
-
-        parseFloat(
-            document.getElementById(
-            "lonMin"
-            ).value
-        ),
-
-        parseFloat(
-            document.getElementById(
-            "lonSec"
-            ).value
-        ),
-
-        document.getElementById(
-        "lonDir"
-        ).value
+    const lon = dmsToDecimal(
+        parseFloat($("lonDeg")?.value || 0),
+        parseFloat($("lonMin")?.value || 0),
+        parseFloat($("lonSec")?.value || 0),
+        $("lonDir")?.value || "E"
     );
 
-    document.getElementById(
-    "latitudeResult"
-    ).innerText =
-    latitude.toFixed(7);
+    const latEl = $("latitudeResult");
+    const lonEl = $("longitudeResult");
 
-    document.getElementById(
-    "longitudeResult"
-    ).innerText =
-    longitude.toFixed(7);
+    if (latEl) latEl.innerText = lat.toFixed(7);
+    if (lonEl) lonEl.innerText = lon.toFixed(7);
+}
+
+// -------------------- NAV VIEWS --------------------
+function showHome() {
+    setDisplay("homePage", "block");
+    setDisplay("gpsTool", "none");
+    setDisplay("dmsTool", "none");
+}
+
+function showGpsTool() {
+    setDisplay("homePage", "none");
+    setDisplay("gpsTool", "block");
+    setDisplay("dmsTool", "none");
+}
+
+function showDmsTool() {
+    setDisplay("homePage", "none");
+    setDisplay("gpsTool", "none");
+    setDisplay("dmsTool", "block");
+}
+
+function setDisplay(id, value) {
+    const el = $(id);
+    if (el) el.style.display = value;
 }

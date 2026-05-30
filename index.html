@@ -15,239 +15,240 @@
 
     <div class="container">
 
-        <h1>ArduPilot GPS Offset Calculator</h1>
+        <!-- HOME PAGE -->
 
-        <div class="card">
+        <div id="homePage">
 
-            <label for="distance">GPS Distance (m)</label>
-            <input
-                type="number"
-                id="distance"
-                value="1"
-                min="0.01"
-                step="0.01">
+            <button id="showGpsBtn">
+                GPS Offset Calculator
+            </button>
 
-            <label for="mountType">Mount Type</label>
-
-            <select id="mountType">
-
-                <option value="diag_fr_rl">
-                    Front Right ↔ Rear Left
-                </option>
-
-                <option value="diag_fl_rr">
-                    Front Left ↔ Rear Right
-                </option>
-
-                <option value="left_right">
-                    Left ↔ Right
-                </option>
-
-                <option value="front_back">
-                    Front ↔ Rear
-                </option>
-
-            </select>
-
-            <button id="calculateBtn">
-                Calculate
+            <button id="showDmsBtn">
+                DMS To Decimal
             </button>
 
         </div>
 
-        <div class="results">
+        <!-- GPS TOOL -->
 
-            <table>
+        <div id="gpsTool" style="display:none;">
 
-                <thead>
-                    <tr>
-                        <th>Parameter</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
+            <button id="gpsBackBtn">
+                ← Back
+            </button>
 
-                <tbody>
+            <h1>ArduPilot Calculator</h1>
 
-                    <tr>
-                        <td>GPS1_POS_X</td>
-                        <td id="gps1x">0</td>
-                    </tr>
+            <div class="card">
 
-                    <tr>
-                        <td>GPS1_POS_Y</td>
-                        <td id="gps1y">0</td>
-                    </tr>
+                <label for="distance">
+                    GPS Distance (m)
+                </label>
 
-                    <tr>
-                        <td>GPS1_POS_Z</td>
-                        <td id="gps1z">0</td>
-                    </tr>
+                <input
+                    type="number"
+                    id="distance"
+                    value="1"
+                    min="0.01"
+                    step="0.01">
 
-                    <tr>
-                        <td>GPS2_POS_X</td>
-                        <td id="gps2x">0</td>
-                    </tr>
+                <label for="mountType">
+                    Mount Type
+                </label>
 
-                    <tr>
-                        <td>GPS2_POS_Y</td>
-                        <td id="gps2y">0</td>
-                    </tr>
+                <select id="mountType">
 
-                    <tr>
-                        <td>GPS2_POS_Z</td>
-                        <td id="gps2z">0</td>
-                    </tr>
+                    <option value="diag_fr_rl">
+                        Front Right ↔ Rear Left
+                    </option>
 
-                    <tr>
-                        <td>GPS1_MB_OFS_X</td>
-                        <td id="mbx">0</td>
-                    </tr>
+                    <option value="diag_fl_rr">
+                        Front Left ↔ Rear Right
+                    </option>
 
-                    <tr>
-                        <td>GPS1_MB_OFS_Y</td>
-                        <td id="mby">0</td>
-                    </tr>
+                    <option value="left_right">
+                        Left ↔ Right
+                    </option>
 
-                    <tr>
-                        <td>GPS1_MB_OFS_Z</td>
-                        <td id="mbz">0</td>
-                    </tr>
+                    <option value="front_back">
+                        Front ↔ Rear
+                    </option>
 
-                </tbody>
+                </select>
 
-            </table>
-
-        </div>
-
-        <!-- dms tool -->
-        <div
-        class="dms-panel"
-        id="dmsPanel"
-        style="display:none;"
-        >
-        
-        <h2>DMS To Decimal Converter</h2>
-        
-        <h3>Latitude</h3>
-        
-        <input
-        type="number"
-        id="latDeg"
-        placeholder="Degrees"
-        >
-        
-        <input
-        type="number"
-        id="latMin"
-        placeholder="Minutes"
-        >
-        
-        <input
-        type="number"
-        id="latSec"
-        placeholder="Seconds"
-        >
-        
-        <select id="latDir">
-        
-        <option value="N">
-        North
-        </option>
-        
-        <option value="S">
-        South
-        </option>
-        
-        </select>
-        
-        <hr>
-        
-        <h3>Longitude</h3>
-        
-        <input
-        type="number"
-        id="lonDeg"
-        placeholder="Degrees"
-        >
-        
-        <input
-        type="number"
-        id="lonMin"
-        placeholder="Minutes"
-        >
-        
-        <input
-        type="number"
-        id="lonSec"
-        placeholder="Seconds"
-        >
-        
-        <select id="lonDir">
-        
-        <option value="E">
-        East
-        </option>
-        
-        <option value="W">
-        West
-        </option>
-        
-        </select>
-        
-        <button id="convertDmsBtn">
-        Convert
-        </button>
-        
-        <h3>
-        
-        Latitude Decimal:
-        
-        <span id="latitudeResult">
-        0.0000000
-        </span>
-        
-        </h3>
-        
-        <h3>
-        
-        Longitude Decimal:
-        
-        <span id="longitudeResult">
-        0.0000000
-        </span>
-        
-        </h3>
-        
-        </div>
-
-        <div class="buttons">
-             <!-- dms tool -->
-             <button id="dmsBtn">
-                DMS To Decimal
+                <button id="calculateBtn">
+                    Calculate
                 </button>
 
+            </div>
 
-            <!-- <button id="copyBtn">
-                Copy Parameters
-            </button> -->
+            <div class="results">
 
-            <!-- <button id="exportBtn">
-                Export PARAM
-            </button> -->
+                <table>
 
-        <!-- </div> -->
+                    <thead>
 
-        <!-- <div class="diagram-section">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                        </tr>
 
-            <h2>Mounting Diagram</h2>
+                    </thead>
 
-            <canvas
-                id="diagram"
-                width="800"
-                height="400">
-            </canvas>
+                    <tbody>
 
-        </div> -->
+                        <tr>
+                            <td>GPS1_POS_X</td>
+                            <td id="gps1x">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS1_POS_Y</td>
+                            <td id="gps1y">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS1_POS_Z</td>
+                            <td id="gps1z">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS2_POS_X</td>
+                            <td id="gps2x">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS2_POS_Y</td>
+                            <td id="gps2y">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS2_POS_Z</td>
+                            <td id="gps2z">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS1_MB_OFS_X</td>
+                            <td id="mbx">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS1_MB_OFS_Y</td>
+                            <td id="mby">0</td>
+                        </tr>
+
+                        <tr>
+                            <td>GPS1_MB_OFS_Z</td>
+                            <td id="mbz">0</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- DMS TOOL -->
+
+        <div id="dmsTool" style="display:none;">
+
+            <button id="dmsBackBtn">
+                ← Back
+            </button>
+
+            <div id="dmsPanel">
+
+                <h1>DMS To Decimal Converter</h1>
+
+                <h3>Latitude</h3>
+
+                <input
+                    type="number"
+                    id="latDeg"
+                    placeholder="Degrees">
+
+                <input
+                    type="number"
+                    id="latMin"
+                    placeholder="Minutes">
+
+                <input
+                    type="number"
+                    id="latSec"
+                    placeholder="Seconds">
+
+                <select id="latDir">
+
+                    <option value="N">
+                        North
+                    </option>
+
+                    <option value="S">
+                        South
+                    </option>
+
+                </select>
+
+                <hr>
+
+                <h3>Longitude</h3>
+
+                <input
+                    type="number"
+                    id="lonDeg"
+                    placeholder="Degrees">
+
+                <input
+                    type="number"
+                    id="lonMin"
+                    placeholder="Minutes">
+
+                <input
+                    type="number"
+                    id="lonSec"
+                    placeholder="Seconds">
+
+                <select id="lonDir">
+
+                    <option value="E">
+                        East
+                    </option>
+
+                    <option value="W">
+                        West
+                    </option>
+
+                </select>
+
+                <button id="convertDmsBtn">
+                    Convert
+                </button>
+
+                <h3>
+
+                    Latitude Decimal:
+
+                    <span id="latitudeResult">
+                        0.0000000
+                    </span>
+
+                </h3>
+
+                <h3>
+
+                    Longitude Decimal:
+
+                    <span id="longitudeResult">
+                        0.0000000
+                    </span>
+
+                </h3>
+
+            </div>
+
+        </div>
 
     </div>
 
