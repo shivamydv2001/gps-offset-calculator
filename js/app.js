@@ -2,121 +2,124 @@ import { dmsToDecimal } from "./dms.js";
 import { calculateCoordinates } from "./geometry.js";
 import { calculateMB } from "./calculator.js";
 
-const $ = (id) => document.getElementById(id);
+document.addEventListener("DOMContentLoaded", () => {
 
-// Safe event binding
-function on(id, event, handler) {
-    const el = $(id);
-    if (el) el.addEventListener(event, handler);
-}
+    const $ = (id) => document.getElementById(id);
 
-// -------------------- NAV --------------------
-on("showGpsBtn", "click", showGpsTool);
-on("showDmsBtn", "click", showDmsTool);
-on("gpsBackBtn", "click", showHome);
-on("dmsBackBtn", "click", showHome);
-
-// -------------------- MAIN CALC --------------------
-on("calculateBtn", "click", runCalculation);
-
-function runCalculation() {
-    const distanceInput = $("distance")?.value?.trim();
-    const distance = distanceInput ? parseFloat(distanceInput) : 0;
-
-    const mountType = $("mountType")?.value || "default";
-
-    if (isNaN(distance)) {
-        alert("Invalid distance value");
-        return;
+    function on(id, event, handler) {
+        const el = $(id);
+        if (el) el.addEventListener(event, handler);
     }
 
-    const gps = calculateCoordinates(distance, mountType);
-    const mb = calculateMB(gps.gps1, gps.gps2);
+    // -------------------- NAV --------------------
+    on("showGpsBtn", "click", showGpsTool);
+    on("showDmsBtn", "click", showDmsTool);
+    on("gpsBackBtn", "click", showHome);
+    on("dmsBackBtn", "click", showHome);
 
-    updateOutput("gps1", gps.gps1);
-    updateOutput("gps2", gps.gps2);
-    updateMB(mb);
-}
+    // -------------------- MAIN CALC --------------------
+    on("calculateBtn", "click", runCalculation);
 
-function updateOutput(prefix, data) {
-    const set = (key, val) => {
-        const el = $(key);
-        if (el) el.innerText = val.toFixed(4);
-    };
+    function runCalculation() {
+        const distanceInput = $("distance")?.value?.trim();
+        const distance = distanceInput ? parseFloat(distanceInput) : 0;
 
-    set(`${prefix}x`, data.x);
-    set(`${prefix}y`, data.y);
-    set(`${prefix}z`, data.z);
-}
+        const mountType = $("mountType")?.value || "default";
 
-function updateMB(mb) {
-    const set = (key, val) => {
-        const el = $(key);
-        if (el) el.innerText = val.toFixed(4);
-    };
+        if (isNaN(distance)) {
+            alert("Invalid distance value");
+            return;
+        }
 
-    set("mbx", mb.x);
-    set("mby", mb.y);
-    set("mbz", mb.z);
-}
+        const gps = calculateCoordinates(distance, mountType);
+        const mb = calculateMB(gps.gps1, gps.gps2);
 
-// Run once safely
-runCalculation();
+        updateOutput("gps1", gps.gps1);
+        updateOutput("gps2", gps.gps2);
+        updateMB(mb);
+    }
 
-// -------------------- DMS TOOL --------------------
-on("dmsBtn", "click", toggleDmsPanel);
-on("convertDmsBtn", "click", convertDmsCoordinates);
+    function updateOutput(prefix, data) {
+        const set = (key, val) => {
+            const el = $(key);
+            if (el) el.innerText = val.toFixed(4);
+        };
 
-function toggleDmsPanel() {
-    const panel = $("dmsPanel");
-    if (!panel) return;
+        set(`${prefix}x`, data.x);
+        set(`${prefix}y`, data.y);
+        set(`${prefix}z`, data.z);
+    }
 
-    panel.style.display =
-        panel.style.display === "none" ? "block" : "none";
-}
+    function updateMB(mb) {
+        const set = (key, val) => {
+            const el = $(key);
+            if (el) el.innerText = val.toFixed(4);
+        };
 
-function convertDmsCoordinates() {
-    const lat = dmsToDecimal(
-        parseFloat($("latDeg")?.value || 0),
-        parseFloat($("latMin")?.value || 0),
-        parseFloat($("latSec")?.value || 0),
-        $("latDir")?.value || "N"
-    );
+        set("mbx", mb.x);
+        set("mby", mb.y);
+        set("mbz", mb.z);
+    }
 
-    const lon = dmsToDecimal(
-        parseFloat($("lonDeg")?.value || 0),
-        parseFloat($("lonMin")?.value || 0),
-        parseFloat($("lonSec")?.value || 0),
-        $("lonDir")?.value || "E"
-    );
+    // Run once safely AFTER DOM is ready
+    runCalculation();
 
-    const latEl = $("latitudeResult");
-    const lonEl = $("longitudeResult");
+    // -------------------- DMS TOOL --------------------
+    on("dmsBtn", "click", toggleDmsPanel);
+    on("convertDmsBtn", "click", convertDmsCoordinates);
 
-    if (latEl) latEl.innerText = lat.toFixed(7);
-    if (lonEl) lonEl.innerText = lon.toFixed(7);
-}
+    function toggleDmsPanel() {
+        const panel = $("dmsPanel");
+        if (!panel) return;
 
-// -------------------- NAV VIEWS --------------------
-function showHome() {
-    setDisplay("homePage", "block");
-    setDisplay("gpsTool", "none");
-    setDisplay("dmsTool", "none");
-}
+        panel.style.display =
+            panel.style.display === "none" ? "block" : "none";
+    }
 
-function showGpsTool() {
-    setDisplay("homePage", "none");
-    setDisplay("gpsTool", "block");
-    setDisplay("dmsTool", "none");
-}
+    function convertDmsCoordinates() {
+        const lat = dmsToDecimal(
+            parseFloat($("latDeg")?.value || 0),
+            parseFloat($("latMin")?.value || 0),
+            parseFloat($("latSec")?.value || 0),
+            $("latDir")?.value || "N"
+        );
 
-function showDmsTool() {
-    setDisplay("homePage", "none");
-    setDisplay("gpsTool", "none");
-    setDisplay("dmsTool", "block");
-}
+        const lon = dmsToDecimal(
+            parseFloat($("lonDeg")?.value || 0),
+            parseFloat($("lonMin")?.value || 0),
+            parseFloat($("lonSec")?.value || 0),
+            $("lonDir")?.value || "E"
+        );
 
-function setDisplay(id, value) {
-    const el = $(id);
-    if (el) el.style.display = value;
-}
+        const latEl = $("latitudeResult");
+        const lonEl = $("longitudeResult");
+
+        if (latEl) latEl.innerText = lat.toFixed(7);
+        if (lonEl) lonEl.innerText = lon.toFixed(7);
+    }
+
+    // -------------------- NAV VIEWS --------------------
+    function showHome() {
+        setDisplay("homePage", "block");
+        setDisplay("gpsTool", "none");
+        setDisplay("dmsTool", "none");
+    }
+
+    function showGpsTool() {
+        setDisplay("homePage", "none");
+        setDisplay("gpsTool", "block");
+        setDisplay("dmsTool", "none");
+    }
+
+    function showDmsTool() {
+        setDisplay("homePage", "none");
+        setDisplay("gpsTool", "none");
+        setDisplay("dmsTool", "block");
+    }
+
+    function setDisplay(id, value) {
+        const el = $(id);
+        if (el) el.style.display = value;
+    }
+
+});
