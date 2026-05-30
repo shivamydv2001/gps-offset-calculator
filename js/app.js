@@ -1,16 +1,20 @@
+import {
+    dmsToDecimal
+}
+from "./dms.js";
 import { calculateCoordinates }
 from "./geometry.js";
 
 import { calculateMB }
 from "./calculator.js";
 
-import { copyParameters }
-from "./clipboard.js";
+// import { copyParameters }
+// from "./clipboard.js";
 
-import { exportParam }
-from "./export.js";
+// import { exportParam }
+// from "./export.js";
 
-let parameterText = "";
+// let parameterText = "";
 
 document
 .getElementById("calculateBtn")
@@ -19,24 +23,39 @@ document
     runCalculation
 );
 
+// document
+// .getElementById("copyBtn")
+// .addEventListener(
+//     "click",
+//     () =>
+//     {
+//         copyParameters(parameterText);
+//     }
+// );
+
+// document
+// .getElementById("exportBtn")
+// .addEventListener(
+//     "click",
+//     () =>
+//     {
+//         exportParam(parameterText);
+//     }
+// );
+
+// dms tool
 document
-.getElementById("copyBtn")
+.getElementById("dmsBtn")
 .addEventListener(
     "click",
-    () =>
-    {
-        copyParameters(parameterText);
-    }
+    toggleDmsPanel
 );
 
 document
-.getElementById("exportBtn")
+.getElementById("convertDmsBtn")
 .addEventListener(
     "click",
-    () =>
-    {
-        exportParam(parameterText);
-    }
+    convertDmsCoordinates
 );
 
 function runCalculation()
@@ -92,7 +111,7 @@ function runCalculation()
     document.getElementById("mbz").innerText =
         mb.z.toFixed(4);
 
-    parameterText =
+    // parameterText =
 
 `GPS1_POS_X=${gps.gps1.x.toFixed(4)}
 GPS1_POS_Y=${gps.gps1.y.toFixed(4)}
@@ -109,3 +128,80 @@ GPS1_MB_OFS_Z=${mb.z.toFixed(4)}
 }
 
 runCalculation();
+
+ //dms tool
+ function toggleDmsPanel()
+ {
+     const panel =
+     document.getElementById(
+         "dmsPanel"
+     );
+ 
+     panel.style.display =
+         panel.style.display === "none"
+         ? "block"
+         : "none";
+ }
+
+ function convertDmsCoordinates()
+{
+    const latitude =
+    dmsToDecimal(
+        parseFloat(
+            document.getElementById(
+            "latDeg"
+            ).value
+        ),
+
+        parseFloat(
+            document.getElementById(
+            "latMin"
+            ).value
+        ),
+
+        parseFloat(
+            document.getElementById(
+            "latSec"
+            ).value
+        ),
+
+        document.getElementById(
+        "latDir"
+        ).value
+    );
+
+    const longitude =
+    dmsToDecimal(
+        parseFloat(
+            document.getElementById(
+            "lonDeg"
+            ).value
+        ),
+
+        parseFloat(
+            document.getElementById(
+            "lonMin"
+            ).value
+        ),
+
+        parseFloat(
+            document.getElementById(
+            "lonSec"
+            ).value
+        ),
+
+        document.getElementById(
+        "lonDir"
+        ).value
+    );
+
+    document.getElementById(
+    "latitudeResult"
+    ).innerText =
+    latitude.toFixed(7);
+
+    document.getElementById(
+    "longitudeResult"
+    ).innerText =
+    longitude.toFixed(7);
+}

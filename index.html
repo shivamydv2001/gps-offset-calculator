@@ -119,19 +119,125 @@
 
         </div>
 
-        <div class="buttons">
-
-            <button id="copyBtn">
-                Copy Parameters
-            </button>
-
-            <button id="exportBtn">
-                Export PARAM
-            </button>
-
+        <!-- dms tool -->
+        <div
+        class="dms-panel"
+        id="dmsPanel"
+        style="display:none;"
+        >
+        
+        <h2>DMS To Decimal Converter</h2>
+        
+        <h3>Latitude</h3>
+        
+        <input
+        type="number"
+        id="latDeg"
+        placeholder="Degrees"
+        >
+        
+        <input
+        type="number"
+        id="latMin"
+        placeholder="Minutes"
+        >
+        
+        <input
+        type="number"
+        id="latSec"
+        placeholder="Seconds"
+        >
+        
+        <select id="latDir">
+        
+        <option value="N">
+        North
+        </option>
+        
+        <option value="S">
+        South
+        </option>
+        
+        </select>
+        
+        <hr>
+        
+        <h3>Longitude</h3>
+        
+        <input
+        type="number"
+        id="lonDeg"
+        placeholder="Degrees"
+        >
+        
+        <input
+        type="number"
+        id="lonMin"
+        placeholder="Minutes"
+        >
+        
+        <input
+        type="number"
+        id="lonSec"
+        placeholder="Seconds"
+        >
+        
+        <select id="lonDir">
+        
+        <option value="E">
+        East
+        </option>
+        
+        <option value="W">
+        West
+        </option>
+        
+        </select>
+        
+        <button id="convertDmsBtn">
+        Convert
+        </button>
+        
+        <h3>
+        
+        Latitude Decimal:
+        
+        <span id="latitudeResult">
+        0.0000000
+        </span>
+        
+        </h3>
+        
+        <h3>
+        
+        Longitude Decimal:
+        
+        <span id="longitudeResult">
+        0.0000000
+        </span>
+        
+        </h3>
+        
         </div>
 
-        <div class="diagram-section">
+        <div class="buttons">
+             <!-- dms tool -->
+             <button id="dmsBtn">
+                DMS To Decimal
+                </button>
+
+
+            <!-- <button id="copyBtn">
+                Copy Parameters
+            </button> -->
+
+            <!-- <button id="exportBtn">
+                Export PARAM
+            </button> -->
+
+        <!-- </div> -->
+
+        <!-- <div class="diagram-section">
 
             <h2>Mounting Diagram</h2>
 
@@ -141,7 +247,7 @@
                 height="400">
             </canvas>
 
-        </div>
+        </div> -->
 
     </div>
 

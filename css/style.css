@@ -105,3 +105,27 @@ canvas {
         width: 100%;
     }
 }
+
+/* dms tool */
+.dms-panel
+{
+    margin-top:20px;
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:10px;
+
+    box-shadow:
+    0 2px 10px
+    rgba(0,0,0,0.1);
+}
+
+.dms-panel input,
+.dms-panel select
+{
+    width:100%;
+
+    margin-bottom:10px;
+}
